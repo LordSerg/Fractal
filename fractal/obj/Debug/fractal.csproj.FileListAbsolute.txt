@@ -1,0 +1,12 @@
+C:\Users\moskalenko_s\Desktop\My games\fractal\fractal\bin\Debug\fractal.exe.config
+C:\Users\moskalenko_s\Desktop\My games\fractal\fractal\bin\Debug\fractal.exe
+C:\Users\moskalenko_s\Desktop\My games\fractal\fractal\bin\Debug\fractal.pdb
+C:\Users\moskalenko_s\Desktop\My games\fractal\fractal\obj\Debug\fractal.csprojResolveAssemblyReference.cache
+C:\Users\moskalenko_s\Desktop\My games\fractal\fractal\obj\Debug\fractal.Form1.resources
+C:\Users\moskalenko_s\Desktop\My games\fractal\fractal\obj\Debug\fractal.Properties.Resources.resources
+C:\Users\moskalenko_s\Desktop\My games\fractal\fractal\obj\Debug\fractal.csproj.GenerateResource.Cache
+C:\Users\moskalenko_s\Desktop\My games\fractal\fractal\obj\Debug\fractal.exe
+C:\Users\moskalenko_s\Desktop\My games\fractal\fractal\obj\Debug\fractal.pdb
+C:\Users\moskalenko_s\Desktop\My games\fractal\fractal\bin\Debug\OpenTK.pdb
+C:\Users\moskalenko_s\Desktop\My games\fractal\fractal\bin\Debug\OpenTK.xml
+C:\Users\moskalenko_s\Desktop\My games\fractal\fractal\bin\Debug\OpenTK.GLControl.xml
