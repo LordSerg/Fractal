@@ -30,74 +30,16 @@ namespace fractal
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            comboBox1.Items.Add("Fractal tree");//+
-            comboBox1.Items.Add("Pythaghoras fractal tree");//-
-            //comboBox1.Items.Add("Dragon curve or Harter - Heighway dragon");//-
-            comboBox1.Items.Add("3D fractal");//-+
+            //comboBox1.Items.Add("Fractal tree");//+
+            //comboBox1.Items.Add("Pythaghoras fractal tree");//-
+            ////comboBox1.Items.Add("Dragon curve or Harter - Heighway dragon");//-
+            //comboBox1.Items.Add("3D fractal");//-+
+            //comboBox1.Items.Add("Точечный фрактал");
             g = CreateGraphics();
             p = new Pen(Color.Black,1);
-        }
-
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            button1.Visible = true;
-            button2.Visible = true;
-            glControl1.Visible = false;
-            label1.Visible = false;
-            textBox1.Visible = false;
-            label2.Visible = false;
-            textBox2.Visible = false;
-            label3.Visible = false;
-            textBox3.Visible = false;
-            label4.Visible = false;
-            textBox4.Visible = false;
-            label5.Visible = false;
-            textBox5.Visible = false;
-            trackBar1.Visible = false;
-            trackBar2.Visible = false;
-            trackBar3.Visible = false;
-
-            if (comboBox1.Text == "")
-            {
-                button1.Visible = false;
-                button2.Visible = false;
-            }
-            if (comboBox1.Text == "Fractal tree")
-            {
-                label1.Visible = true;
-                textBox1.Visible = true;
-                label2.Visible = true;
-                textBox2.Visible = true;
-                label4.Visible = true;
-                textBox4.Visible = true;
-                label5.Visible = true;
-                textBox5.Visible = true;
-            }
-
-            //временно
-            if(comboBox1.Text == "Pythaghoras fractal tree")
-            {
-                MessageBox.Show("Этот фрактал еще не готов...", "Упс!!!", MessageBoxButtons.OK);
-                button1.Visible = false;
-                button2.Visible = false;
-            }
-            if(comboBox1.Text == "3D fractal")
-            {
-                //MessageBox.Show("Этот фрактал еще не готов...", "Упс!!!", MessageBoxButtons.OK);
-                label1.Visible = true;
-                textBox1.Visible = true;
-                label2.Visible = true;
-                textBox2.Visible = true;
-                label3.Visible = true;
-                textBox3.Visible = true;
-                label4.Visible = true;
-                textBox4.Visible = true;
-                label5.Visible = true;
-                textBox5.Visible = true;
-                trackBar1.Visible = true;
-                trackBar2.Visible = true;
-                trackBar3.Visible = true;
-            }
+            //clkx = new int[4];
+            //clky = new int[4];
+            
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -107,21 +49,9 @@ namespace fractal
             if (checkBox1.Checked)
                 this.Refresh();
             //____________________________________________________________________________________________________________________________________________________________________________________________________________________
-            if(comboBox1.Text=="")
+            if (tabControl1.SelectedIndex == 0)
             {
-                MessageBox.Show("Чтобы построить фрактал - выберете его вид","Подсказка",MessageBoxButtons.OK);
-                for (int i = 0; i < 3; i++)
-                {
-                    g.FillRectangle(Brushes.Red, comboBox1.Location.X - 5, comboBox1.Location.Y - 5, comboBox1.Width + 10, comboBox1.Height + 10);
-                    Thread.Sleep(100);
-                    g.FillRectangle(Brushes.White, comboBox1.Location.X - 5, comboBox1.Location.Y - 5, comboBox1.Width + 10, comboBox1.Height + 10);
-                    Thread.Sleep(100);
-                }
-                comboBox1.Focus();
-            }
-            //____________________________________________________________________________________________________________________________________________________________________________________________________________________
-            if (comboBox1.Text == "Fractal tree")
-            {
+                g = tabPage1.CreateGraphics();
                 n = Convert.ToInt32(textBox1.Text);
                 l = Convert.ToDouble(textBox5.Text);
                 x0 = this.Width / 2;
@@ -144,12 +74,13 @@ namespace fractal
                 */
             }
             //____________________________________________________________________________________________________________________________________________________________________________________________________________________
-            if (comboBox1.Text== "Pythaghoras fractal tree")
+            if (tabControl1.SelectedIndex == 2)//
             {
-                n = Convert.ToInt32(textBox1.Text);
-                l = Convert.ToDouble(textBox5.Text);
+                g = tabPage3.CreateGraphics();
+                n = Convert.ToInt32(textBox16.Text);
+                l = Convert.ToDouble(textBox19.Text);
                 double alpha, betta;
-                alpha = Convert.ToDouble(textBox2.Text);
+                alpha = Convert.ToDouble(textBox17.Text);
                 betta = Convert.ToDouble(textBox3.Text);
                 if (alpha + betta < 180)
                 {
@@ -192,8 +123,9 @@ namespace fractal
                 }
             }
             //____________________________________________________________________________________________________________________________________________________________________________________________________________________
-            if (comboBox1.Text== "3D fractal")
-            {//дерево
+            if (tabControl1.SelectedIndex == 1)
+            {//3д дерево
+                g = tabPage2.CreateGraphics();
                 glControl1.Visible = true;
                 n = Convert.ToInt32(textBox1.Text);
                 l = Convert.ToDouble(textBox5.Text)/1000;
@@ -238,9 +170,56 @@ namespace fractal
                 //timer1.Enabled = true;
             }
             //____________________________________________________________________________________________________________________________________________________________________________________________________________________
-            if(comboBox1.Text=="123")
+            /*if(tabControl1.SelectedIndex == "")//создание n-стороннего дерева
             {
-                //создание n-стороннего дерева
+
+            }*/
+            //____________________________________________________________________________________________________________________________________________________________________________________________________________________
+            if (tabControl1.SelectedIndex == 3)//создание фрактала по точкам
+            {
+                g = tabPage4.CreateGraphics();
+                
+                int k = Convert.ToInt32(textBox1.Text);//k - количество итераций
+                //MessageBox.Show("выберите первую точку;", "Подсказка", MessageBoxButtons.OK);
+                Point[] coord;
+                coord = new Point[5];
+                coord[0] = new Point(Convert.ToInt32(textBox6.Text), Convert.ToInt32(textBox7.Text));
+                coord[1] = new Point(Convert.ToInt32(textBox8.Text), Convert.ToInt32(textBox9.Text));
+                coord[2] = new Point(Convert.ToInt32(textBox10.Text), Convert.ToInt32(textBox11.Text));
+                //coord[3] = new Point(Convert.ToInt32(textBox12.Text), Convert.ToInt32(textBox13.Text));
+                coord[3] = new Point(0, 0);
+                g.DrawLine(p, coord[0], coord[1]);
+                g.DrawLine(p, coord[1], coord[2]);
+                g.DrawLine(p, coord[2], coord[0]);
+                //g.DrawLine(p, coord[3], coord[0]);
+                for (int i = 0; i < 5; i++)
+                {
+                    g.DrawEllipse(p, coord[i].X, coord[i].Y, 1, 1);
+                }
+                Random r = new Random();
+                int rk;
+
+                for(int i=0;i<k;i++)
+                {
+                    rk = r.Next(1,4);
+                    if(rk==1)
+                    {
+                        coord[3] = fractal5(coord[0], coord[3]);
+                    }
+                    if (rk == 2)
+                    {
+                        coord[3] = fractal5(coord[1], coord[3]);
+                    }
+                    if (rk == 3)
+                    {
+                        coord[3] = fractal5(coord[2], coord[3]);
+                    }
+                    //if (rk == 4)
+                    //{
+                    //    coord[4] = fractal5(coord[3], coord[4]);
+                    //}
+                    g.DrawEllipse(p, coord[3].X, coord[3].Y, 1, 1);
+                }
             }
         }
 
@@ -356,6 +335,14 @@ namespace fractal
             }
         }
 
+        Point fractal5(Point a,Point a1)//
+        {
+            //1.наxодим расстояние, на которое передвигаемся;
+            Point S1 = a;
+            S1.X += (a1.X - a.X) / 2;
+            S1.Y -= (a1.Y - a.Y) / 2;
+            return S1;
+        }
         
         private void timer1_Tick(object sender, EventArgs e)
         {
@@ -368,12 +355,6 @@ namespace fractal
                 glControl1.SwapBuffers();
             }
             
-        }
-
-        private void trackBar6_Scroll(object sender, EventArgs e)
-        {//blue
-            label7.BackColor = Color.FromArgb(trackBar4.Value, trackBar5.Value, trackBar6.Value);
-            label7.ForeColor = Color.FromArgb(250 - trackBar4.Value, 250 - trackBar5.Value, 250 - trackBar6.Value);
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -396,13 +377,57 @@ namespace fractal
             GL.Rotate(90,1,0,0);
             //glControl1.SwapBuffers();
         }
+        int []clkx, clky;
+        
+        int iclk =0;
+        private void Form1_MouseClick(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            /*if (iclk == 0)
+            {
+                clkx[iclk] = e.X;
+                clky[iclk] = e.Y;
+                g.DrawEllipse(p, clkx[iclk], clky[iclk], 2, 2);
+                iclk++;
+                
+            }
+            else if (iclk == 1)
+            {
+                clkx[iclk] = e.X;
+                clky[iclk] = e.Y;
+                g.DrawEllipse(p, clkx[iclk], clky[iclk], 2, 2);
+                iclk++;
+                
+            }
+            else if (iclk == 2)
+            {
+                clkx[iclk] = e.X;
+                clky[iclk] = e.Y;
+                g.DrawEllipse(p, clkx[iclk], clky[iclk], 2, 2);
+                iclk++;
+                
+            }
+            else if (iclk == 3)
+            {
+                clkx[iclk] = e.X;
+                clky[iclk] = e.Y;
+                g.DrawEllipse(p, clkx[iclk], clky[iclk], 2, 2);
+                iclk++;
+                
+            }*/
 
-        private void trackBar5_Scroll(object sender, EventArgs e)
+        }
+
+        private void trackBar5_Scroll_1(object sender, EventArgs e)
         {//green
             label7.BackColor = Color.FromArgb(trackBar4.Value, trackBar5.Value, trackBar6.Value);
             label7.ForeColor = Color.FromArgb(250 - trackBar4.Value, 250 - trackBar5.Value, 250 - trackBar6.Value);
         }
-        private void trackBar4_Scroll(object sender, EventArgs e)
+        private void trackBar6_Scroll_1(object sender, EventArgs e)
+        {//blue
+            label7.BackColor = Color.FromArgb(trackBar4.Value, trackBar5.Value, trackBar6.Value);
+            label7.ForeColor = Color.FromArgb(250 - trackBar4.Value, 250 - trackBar5.Value, 250 - trackBar6.Value);
+        }
+        private void trackBar4_Scroll_1(object sender, EventArgs e)
         {//red
             label7.BackColor = Color.FromArgb(trackBar4.Value, trackBar5.Value, trackBar6.Value);
             label7.ForeColor = Color.FromArgb(250 - trackBar4.Value, 250 - trackBar5.Value, 250 - trackBar6.Value);
