@@ -27,7 +27,7 @@ namespace fractal
         Pen p;
         int n;
         double x, y, s;
-
+        Point3d[] a;
         private void Form1_Load(object sender, EventArgs e)
         {
             //comboBox1.Items.Add("Fractal tree");//+
@@ -37,25 +37,36 @@ namespace fractal
             //comboBox1.Items.Add("Точечный фрактал");
             g = CreateGraphics();
             p = new Pen(Color.Black,1);
+            bmp = new Bitmap(pictureBox1.Width, pictureBox1.Height);
             //clkx = new int[4];
             //clky = new int[4];
-            
+            //pictureBox1.BackColor = Color.White;
+            label7.BackColor = Color.FromArgb(trackBar4.Value, trackBar5.Value, trackBar6.Value);
+            label7.ForeColor = Color.FromArgb(250 - trackBar4.Value, 250 - trackBar5.Value, 250 - trackBar6.Value);
         }
+        Bitmap bmp;
 
-        private void button1_Click(object sender, EventArgs e)
+        void draw_fractal()
         {
-            p.Color = Color.FromArgb(trackBar4.Value, trackBar5.Value, trackBar6.Value);
+            p.Color = label7.BackColor;//Color.FromArgb(trackBar4.Value, trackBar5.Value, trackBar6.Value);
             double l, x0, y0;
             if (checkBox1.Checked)
-                this.Refresh();
+            {
+                bmp = new Bitmap(pictureBox1.Width, pictureBox1.Height);
+                pictureBox1.Refresh();
+                g = Graphics.FromImage(bmp);
+                g.Clear(Color.Black/*label7.ForeColor*/);
+            }
             //____________________________________________________________________________________________________________________________________________________________________________________________________________________
             if (tabControl1.SelectedIndex == 0)
             {
-                g = tabPage1.CreateGraphics();
+                
                 n = Convert.ToInt32(textBox1.Text);
                 l = Convert.ToDouble(textBox5.Text);
-                x0 = this.Width / 2;
-                y0 = this.Height * 4 / 5;
+                //x0 = this.Width / 2;
+                x0 = Convert.ToInt32(textBox18.Text);
+                //y0 = this.Height * 4 / 5;
+                y0 = Convert.ToInt32(textBox20.Text);
                 g.DrawLine(p, Convert.ToInt32(x0), Convert.ToInt32(y0), Convert.ToInt32(x0), Convert.ToInt32(y0 - l));
                 double alpha = Convert.ToDouble(textBox2.Text);
                 double alpha0 = alpha;
@@ -74,9 +85,9 @@ namespace fractal
                 */
             }
             //____________________________________________________________________________________________________________________________________________________________________________________________________________________
-            if (tabControl1.SelectedIndex == 2)//
-            {
-                g = tabPage3.CreateGraphics();
+            if (tabControl1.SelectedIndex == 2)
+            {//3д дерево
+                g = Graphics.FromImage(bmp);
                 n = Convert.ToInt32(textBox16.Text);
                 l = Convert.ToDouble(textBox19.Text);
                 double alpha, betta;
@@ -84,35 +95,35 @@ namespace fractal
                 betta = Convert.ToDouble(textBox3.Text);
                 if (alpha + betta < 180)
                 {
-                    bool r;
-                    x0 =this.Width/2-l/2;
-                    y0 =this.Height*2/3+l/2;
+                    //bool r;
+                    x0 = this.Width / 2 - l / 2;
+                    y0 = this.Height * 2 / 3 + l / 2;
                     //drawing the first cube
                     g.DrawLine(p, Convert.ToInt32(x0), Convert.ToInt32(y0), Convert.ToInt32(x0 + l), Convert.ToInt32(y0));
-                    g.DrawLine(p, Convert.ToInt32(x0), Convert.ToInt32(y0), Convert.ToInt32(x0), Convert.ToInt32(y0-l));
-                    g.DrawLine(p, Convert.ToInt32(x0+l), Convert.ToInt32(y0), Convert.ToInt32(x0 + l), Convert.ToInt32(y0-l));
-                    g.DrawLine(p, Convert.ToInt32(x0), Convert.ToInt32(y0-l), Convert.ToInt32(x0 + l), Convert.ToInt32(y0-l));
+                    g.DrawLine(p, Convert.ToInt32(x0), Convert.ToInt32(y0), Convert.ToInt32(x0), Convert.ToInt32(y0 - l));
+                    g.DrawLine(p, Convert.ToInt32(x0 + l), Convert.ToInt32(y0), Convert.ToInt32(x0 + l), Convert.ToInt32(y0 - l));
+                    g.DrawLine(p, Convert.ToInt32(x0), Convert.ToInt32(y0 - l), Convert.ToInt32(x0 + l), Convert.ToInt32(y0 - l));
                     //{a=l*sin(betta)/sin(180-(alpha+betta))  =>{h=sin(alpha)*l*sin(betta)/sin(180-(alpha+betta))  =>  y1=y0-l-sin(alpha)*sin(betta)*l/sin(180-(alpha+betta))
                     //{h=sin(alpha)*a/sin(90)                   {y1=y0-l-h
-                    double y1 = y0 - l - (Math.Sin(betta * Math.PI / 180) *Math.Sin((alpha) * Math.PI / 180) * l) / ((-1) * Math.Sin((alpha + betta) * Math.PI / 180));
+                    double y1 = y0 - l - (Math.Sin(betta * Math.PI / 180) * Math.Sin((alpha) * Math.PI / 180) * l) / ((-1) * Math.Sin((alpha + betta) * Math.PI / 180));
                     //{l1=a*sin(90-alpha)  => {x1=x0+a*sin(90-alpha)                  =>  x1=x0+sin(90-alpha)*sin(betta)*l/sin(180-(alpha+betta))   =>   x1=x0+(cos(alpha)*sin(betta)*l)/-1*(sin(alpha+betta))
                     //{x1=x0+l1               {a=l*sin(betta)/sin(180-(alpha+betta))
                     double x1 = x0 + (Math.Cos((alpha) * Math.PI / 180) * Math.Sin(betta * Math.PI / 180) * l) / ((-1) * Math.Sin((alpha + betta) * Math.PI / 180));
-                    
+
                     //r=true - right
                     //r=false - left
 
                     g.DrawLine(p, Convert.ToInt32(x1), Convert.ToInt32(y1), Convert.ToInt32(x0 + l), Convert.ToInt32(y0 - l));
                     g.DrawLine(p, Convert.ToInt32(x1), Convert.ToInt32(y1), Convert.ToInt32(x0), Convert.ToInt32(y0 - l));
 
-                    r = false;
+                    //r = false;
                     //fractal1(n, x0, y0 - l, x1, y1, alpha, betta,r);
-                    r = true;
+                    //r = true;
                     //fractal1(n, x0 + l, y0 - l, x1, y1, alpha, betta,r);
                 }
                 else
                 {
-                    MessageBox.Show("","'a' + 'b' Shouldn't be more than 180!!!",MessageBoxButtons.OK);
+                    MessageBox.Show("", "'a' + 'b' Shouldn't be more than 180!!!", MessageBoxButtons.OK);
                     for (int i = 0; i < 4; i++)
                     {
                         g.FillRectangle(Brushes.Red, label2.Location.X - 5, label2.Location.Y - 5, label2.Width + textBox2.Width + 10, label2.Height * 2 + 25);
@@ -124,24 +135,24 @@ namespace fractal
             }
             //____________________________________________________________________________________________________________________________________________________________________________________________________________________
             if (tabControl1.SelectedIndex == 1)
-            {//3д дерево
-                g = tabPage2.CreateGraphics();
+            {//
+                /*g = Graphics.FromImage(bmp);
                 glControl1.Visible = true;
                 n = Convert.ToInt32(textBox1.Text);
-                l = Convert.ToDouble(textBox5.Text)/1000;
+                l = Convert.ToDouble(textBox5.Text) / 1000;
                 double alpha = Convert.ToDouble(textBox2.Text);//угол, относительно центральной вертикали
                 double betta = Convert.ToDouble(textBox3.Text);//угол подвыподветурности следующей ветви
                 Vector3d a;
                 a.X = 0;
-                a.Y = l - 1;    
+                a.Y = l - 1;
                 a.Z = 0;
                 double s = Convert.ToDouble(textBox4.Text);
-                
+
                 GL.Clear(ClearBufferMask.ColorBufferBit);
                 GL.ClearColor(this.BackColor);
                 GL.Begin(PrimitiveType.Lines);
                 GL.Color3(p.Color);
-                GL.Vertex3(0,-1,0);
+                GL.Vertex3(0, -1, 0);
                 GL.Vertex3(a);
 
                 //GL.Vertex3(a);
@@ -165,7 +176,7 @@ namespace fractal
                 betta = Convert.ToDouble(textBox3.Text);
                 fractal4(n, a, alpha, betta + 240, l, s, alpha);
                 GL.End();
-                glControl1.SwapBuffers();
+                glControl1.SwapBuffers();*/
                 //timer1.Interval = 1;
                 //timer1.Enabled = true;
             }
@@ -177,8 +188,8 @@ namespace fractal
             //____________________________________________________________________________________________________________________________________________________________________________________________________________________
             if (tabControl1.SelectedIndex == 3)//создание фрактала по точкам
             {
-                g = tabPage4.CreateGraphics();
-                
+                g = Graphics.FromImage(bmp);
+
                 int k = Convert.ToInt32(textBox1.Text);//k - количество итераций
                 //MessageBox.Show("выберите первую точку;", "Подсказка", MessageBoxButtons.OK);
                 Point[] coord;
@@ -199,10 +210,10 @@ namespace fractal
                 Random r = new Random();
                 int rk;
 
-                for(int i=0;i<k;i++)
+                for (int i = 0; i < k; i++)
                 {
-                    rk = r.Next(1,4);
-                    if(rk==1)
+                    rk = r.Next(1, 4);
+                    if (rk == 1)
                     {
                         coord[3] = fractal5(coord[0], coord[3]);
                     }
@@ -221,6 +232,11 @@ namespace fractal
                     g.DrawEllipse(p, coord[3].X, coord[3].Y, 1, 1);
                 }
             }
+            pictureBox1.Image = bmp;
+        }
+        private void button1_Click(object sender, EventArgs e)
+        {
+            draw_fractal();
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -228,11 +244,11 @@ namespace fractal
             if (button2.Text == "Опции↓")
             {//показать опции
                 button2.Text = "Опции↑";
-                panel1.Height = 0;
-                panel1.Visible = true;
-                while(panel1.Height<=200)
+                panel4.Height = 0;
+                panel4.Visible = true;
+                while(panel4.Height<=200)
                 {
-                    panel1.Height++;
+                    panel4.Height++;
                 }
                 label7.BackColor = Color.FromArgb(trackBar4.Value, trackBar5.Value, trackBar6.Value);
                 label7.ForeColor = Color.FromArgb(250 - trackBar4.Value, 250 - trackBar5.Value, 250 - trackBar6.Value);
@@ -240,30 +256,27 @@ namespace fractal
             else
             {//спрятать опции
                 button2.Text = "Опции↓";
-                while (panel1.Height>0)
+                while (panel4.Height>0)
                 {
-                    panel1.Height--;
+                    panel4.Height--;
                 }
-                panel1.Visible = false;
+                panel4.Visible = false;
             }
         }
-       
         void fractal(int n,double x0,double y0,double l,double alpha, double alpha0)//fractal tree
         {
             if(n>=1)
             {
-                x = (Math.Sin(alpha*(Math.PI/180)) * l);
-                y = -(Math.Sin((90 - alpha )* (Math.PI / 180)) * l);
+                x = (Math.Sin(alpha * (Math.PI / 180)) * l);
+                y = -(Math.Sin((90 - alpha) * (Math.PI / 180)) * l);
                 g.DrawLine(p, Convert.ToInt32(x0), Convert.ToInt32(y0), Convert.ToInt32(x0 + x), Convert.ToInt32(y0 + y));
                 fractal(n - 1, x0 + x, y0 + y, l / s, alpha + alpha0, alpha0);
-
                 x = (Math.Sin(alpha * (Math.PI / 180)) * l);
                 y = -(Math.Sin((90 - alpha) * (Math.PI / 180)) * l);
                 g.DrawLine(p, Convert.ToInt32(x0), Convert.ToInt32(y0), Convert.ToInt32(x0 + x), Convert.ToInt32(y0 + y));
                 fractal(n - 1, x0 + x, y0 + y, l / s, alpha - alpha0, alpha0);
             }
         }
-
         void fractal1(int n, double x0, double y0, double x1, double y1,double alpha,double betta,bool r)//Pythaghoras fractal tree
         {
             //1.вычисляем длинну прямой
@@ -347,35 +360,24 @@ namespace fractal
         private void timer1_Tick(object sender, EventArgs e)
         {
 
-            if (!(trackBar1.Value == 0 && trackBar2.Value == 0 && trackBar3.Value == 0))
+            draw_tree(Point3d a);
+            Point3d.rotate(trackBar1.Value,trackBar2.Value,trackBar3.Value);
+            /*if (!(trackBar1.Value == 0 && trackBar2.Value == 0 && trackBar3.Value == 0))
             {
                 GL.Begin(PrimitiveType.Patches);
                 GL.Rotate(1, trackBar1.Value, trackBar2.Value, trackBar3.Value);
                 GL.End();
                 glControl1.SwapBuffers();
+            }*/
+            
+        }
+
+        void draw_tree(Point3d []x)
+        {//рисуем дерево по точкам
+            for(int i=0;i<x.Length-1;i++)
+            {
+                Point3d.draw_line(x[i],x[i+1],pictureBox1,g);
             }
-            
-        }
-
-        private void button3_Click(object sender, EventArgs e)
-        {
-            GL.Clear(ClearBufferMask.ColorBufferBit);
-            GL.ClearColor(this.BackColor);
-            //button1_Click(sender, e);
-            GL.Begin(PrimitiveType.Patches);
-            GL.Rotate(15, 0, 1, 0);
-            GL.End();
-            glControl1.SwapBuffers();
-        }
-
-        private void button4_Click(object sender, EventArgs e)
-        {
-            //GL.Clear(ClearBufferMask.ColorBufferBit);
-            //GL.ClearColor(this.BackColor);
-            //button1_Click(sender, e);
-            
-            GL.Rotate(90,1,0,0);
-            //glControl1.SwapBuffers();
         }
         int []clkx, clky;
         
@@ -417,11 +419,110 @@ namespace fractal
 
         }
 
+        private void TrackBar7_Scroll(object sender, EventArgs e)
+        {
+            textBox5.Text = trackBar7.Value.ToString();
+        }
+
+        private void TrackBar8_Scroll(object sender, EventArgs e)
+        {
+            textBox4.Text = (trackBar8.Value * 0.01).ToString();
+        }
+
+        private void TrackBar9_Scroll(object sender, EventArgs e)
+        {
+            textBox2.Text = trackBar9.Value.ToString();
+        }
+
+        private void TrackBar10_Scroll(object sender, EventArgs e)
+        {
+            textBox1.Text = trackBar10.Value.ToString();
+        }
+
+        private void TextBox1_TextChanged(object sender, EventArgs e)
+        {
+            try_changeText();
+        }
+
+        private void TextBox2_TextChanged(object sender, EventArgs e)
+        {
+            try_changeText();
+        }
+
+        private void TextBox4_TextChanged(object sender, EventArgs e)
+        {
+            try_changeText();
+        }
+
+        private void TextBox5_TextChanged(object sender, EventArgs e)
+        {
+            try_changeText();
+        }
+
         private void trackBar5_Scroll_1(object sender, EventArgs e)
         {//green
             label7.BackColor = Color.FromArgb(trackBar4.Value, trackBar5.Value, trackBar6.Value);
             label7.ForeColor = Color.FromArgb(250 - trackBar4.Value, 250 - trackBar5.Value, 250 - trackBar6.Value);
         }
+
+        private void PictureBox1_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            if ((Math.Abs(e.X - panel3.Location.X) <panel3.Width)&& (Math.Abs(e.Y - panel3.Location.Y) < panel3.Height))
+                panel3.Visible = true;
+            else
+                panel3.Visible = false;
+            trackBar9.Select();
+        }
+
+        private void TrackBar11_Scroll(object sender, EventArgs e)
+        {
+            textBox21.Text = trackBar11.Value.ToString();
+        }
+
+        private void TrackBar12_Scroll(object sender, EventArgs e)
+        {
+            textBox22.Text = trackBar12.Value.ToString();
+        }
+
+        private void TrackBar13_Scroll(object sender, EventArgs e)
+        {
+            textBox23.Text = (trackBar13.Value * 0.01).ToString();
+        }
+
+        private void TrackBar14_Scroll(object sender, EventArgs e)
+        {
+            textBox24.Text = trackBar14.Value.ToString();
+        }
+
+        private void TrackBar15_Scroll(object sender, EventArgs e)
+        {
+            textBox25.Text = trackBar15.Value.ToString();
+        }
+
+        private void TrackBar3_Scroll(object sender, EventArgs e)
+        {
+            if (trackBar1.Value != 0 || trackBar2.Value != 0 || trackBar3.Value != 0)
+                timer1.Enabled = true;
+            else
+                timer1.Enabled = false;
+        }
+
+        private void TrackBar2_Scroll(object sender, EventArgs e)
+        {
+            if (trackBar1.Value != 0 || trackBar2.Value != 0 || trackBar3.Value != 0)
+                timer1.Enabled = true;
+            else
+                timer1.Enabled = false;
+        }
+
+        private void TrackBar1_Scroll(object sender, EventArgs e)
+        {
+            if (trackBar1.Value != 0 || trackBar2.Value != 0 || trackBar3.Value != 0)
+                timer1.Enabled = true;
+            else
+                timer1.Enabled = false;
+        }
+
         private void trackBar6_Scroll_1(object sender, EventArgs e)
         {//blue
             label7.BackColor = Color.FromArgb(trackBar4.Value, trackBar5.Value, trackBar6.Value);
@@ -431,6 +532,14 @@ namespace fractal
         {//red
             label7.BackColor = Color.FromArgb(trackBar4.Value, trackBar5.Value, trackBar6.Value);
             label7.ForeColor = Color.FromArgb(250 - trackBar4.Value, 250 - trackBar5.Value, 250 - trackBar6.Value);
+        }
+        void try_changeText()
+        {
+            try
+            {
+                draw_fractal();
+            }
+            catch { }
         }
     }
 }
